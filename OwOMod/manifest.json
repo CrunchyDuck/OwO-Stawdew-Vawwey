@@ -6,5 +6,5 @@
 	"UniqueID": "CrunchyDuck.OwOMod",
 	"EntryDll": "OwOMod.dll",
 	"MinimumApiVersion": "3.0.0",
-	"UpdateKeys": []
+	"UpdateKeys": ["Nexus:8923", "GitHub:CrunchyDuck/OwO-Stawdew-Vawwey"]
 }
