@@ -2,7 +2,7 @@
 	"Name": "OwO Stawdew Vawwey",
 	"Author": "CrunchyDuck",
 	"Version": "1.0.0",
-	"Description": "d-dis mod m-makes aww text UwUy~ | This mod changes all test to be UwU-ified.",
+	"Description": "d-dis mod m-makes text UwUy~ | This mod changes text to be UwU-ified.",
 	"UniqueID": "CrunchyDuck.OwOMod",
 	"EntryDll": "OwOMod.dll",
 	"MinimumApiVersion": "3.0.0",

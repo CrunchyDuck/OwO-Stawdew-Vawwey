@@ -29,7 +29,8 @@ namespace OwOMod {
                 "\n==== Examples ====\n" +
                 "oworandom\n" +
                 "oworandom on\n" +
-                "" +
+                "oworandom flip\n" +
+
                 "\n==== Options ====\n" +
                 "oworandom - Providing no arguments will give information about the current state.\n" +
                 "on - Turn this modification on!\n" +
@@ -41,6 +42,7 @@ namespace OwOMod {
 
 				"\n==== Usage ====\n" +
 				"owoshuffle\n" +
+				"owoshuffle word\n" +
 
 				"\n==== Options ====\n" +
 				"What do trees grow from?\n" +
@@ -67,7 +69,7 @@ namespace OwOMod {
 			harmony.Patch(original, prefix: patch);
 
             // == Resize text boxes for bigger strings ==
-			patch = new HarmonyMethod(typeof(PatchOwO), "Prefix");
+			patch = new HarmonyMethod(typeof(PatchOwO), "textBoxPrefix");
 
 			original = AccessTools.Method(typeof(SpriteText), "getWidthOfString"); // Resizes the textboxes to fit the next text.
 			harmony.Patch(original, prefix: patch);
@@ -83,7 +85,8 @@ namespace OwOMod {
 			original = AccessTools.Method(typeof(SpriteBatch), "DrawString", new Type[] { typeof(SpriteFont), typeof(string), typeof(Vector2), typeof(Color), typeof(float), typeof(Vector2), typeof(float), typeof(SpriteEffects), typeof(float) });
 			harmony.Patch(original, prefix: patch);
 
-            // This is very similar to the Microsoft code, but Mr Ape made it himself. Dear God, the number of types.
+            // This is very similar to the Microsoft code, but Mr Ape made it himself.
+            // Dear God, the number of types.
             Type[] lots_of_types = new Type[] { typeof(SpriteBatch), typeof(string), typeof(SpriteFont), typeof(int), typeof(int), typeof(int), typeof(string), typeof(int), typeof(string[]), typeof(Item), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(float), typeof(CraftingRecipe), typeof(System.Collections.Generic.IList<Item>) };
             original = AccessTools.Method(typeof(StardewValley.Menus.IClickableMenu), "drawHoverText", lots_of_types);
 			harmony.Patch(original, prefix: patch);
@@ -112,14 +115,15 @@ namespace OwOMod {
                 "Allows you to customize the intensity of the OwO-ing text.\n\n" +
 
                 "==== Usage ====\n" +
+                $"{cmd_name}" +
                 $"{cmd_name} lisp chaos excited anxiety cat"+"{0} faces\n\n" +
 
                 "==== Modifiers ====\n" +
                 $"Providing no commands \"{cmd_name}\" will tell you the status of the modifiers.\n\n" +
 
                 "Using these words in your command will toggle effects on or off:\n" +
-                ":) - Enables all effects. please reconsider.\n" +
-                ":( - Disables all effects. please reconsider?\n\n" +
+                "  :) - Enables all effects. please reconsider.\n" +
+                "  :( - Disables all effects. please reconsider?\n\n" +
 
                 "lisp - replaces Rs and Ls with Ws\n" +
                 "chaos - replaces O with OwO and U with UwU\n" +
@@ -130,7 +134,7 @@ namespace OwOMod {
                 "faces - Add emotes to text!\n";
 
             if (Config.secret_found != -1)
-                documentation = string.Format(documentation, " stoned", "stoned - Doubles up the text wiikkee whhiiss. Might cause bugs!\n");
+                documentation = string.Format(documentation, " stoned", "stoned - Doubles up the text wiikkee whhiiss. Will cause more graphical bugs!\n");
             else
                 documentation = string.Format(documentation, "", "");
 
@@ -371,63 +375,53 @@ namespace OwOMod {
             if (Config.secret_found > 0) {
                 string message = "";
                 bool end_reached = false;
-                switch (Config.secret_found) {
-                    case 1:
-                        message = 
-                            "\nBack again? You've already unlocked the stoned secret!\n" +
-                            "Did you notice it now appears in the help menus? Probably. You're smart like that.\n" +
-                            "Although it'll only do it in \"help owo\" after a restart. SMAPI limitation.\n" +
-                            "I'll be impressed if anyone actually finds this mesasge in the first place!\n" +
-                            "-CrunchyDuck <3\n";
-                        break;
-                    case 2:
-                        message =
-                            "\nHi again.\n" +
-                            "Come back to chat?\n" +
-                            "It does get lonely sometimes working on this stuff.\n";
-                        break;
-                    case 3:
-                        message =
-                            "\nI actually got my start in modding in RimWorld. The modding is strikingly similar to Stardew's!\n" +
-                            "I wasn't very good at it, being my first foray into programming. But it's been years since then.\n" +
-                            "When I came to Stardew and SMAPI was like \"Oh yeah, we use Harmony\" I was like :O\n" +
-                            "Then when I learned a little more about decompilation for this project, I felt like a true hacker.\n" +
-                            "I really want to try my hand at doing my own Harmony projects.\n";
-                        break;
-                    case 4:
-                        message =
-                            "\nActually, something I was thinking of doing is a YouTube series on the code of Stardew.\n" +
-                            "There's some interesting things in there.\n" +
-                            "I figured I might start with explaining the ins and outs of fishing first.\n";
-                        break;
-                    case 5:
-                        message =
-                            "\nThis project kind of helped me, personally. It's sort of the only reason I'm writing this easter egg.\n" +
-                            "I guess I like \'marking\' parts of my history. I do it with most of my projects.\n" +
-                            "I was having a bit of a crisis of *why* I do what I do. I made a video about it, kind of.\n" +
-                            "I don't really know how to talk about it with a stranger,\nbut my upbringing really pushed me towards wanting fame, or glory.\n" +
-                            "But I don't think that's what I want. I just want to marvel at the world, and make others do the same.\n";
-                        break;
-                    case 6:
-                        message =
-                            "\nI actually tried to volunteer at a local farm, recently!\n" +
-                            "I've always loved learning to do things on my own, from scratch.\n" +
-                            "Like, if I had all the fancy tools taken away from me, I could still do it.\n" +
-                            "They grow various vegetables, I love animals, and I figured it'd be some nice exercise.\n" +
-                            "I haven't heard back from them, though.\n";
-                        break;
-                    case 7:
-                        message =
-                            "\nI feel like I want to say a lot more here, but I can't really bring myself to do it.\n" +
-                            "But I really do appreciate you reading my dumb ramblings. Or, well, just being someone who used my mod.\n" +
-                            "I'll probably get back to work now. There's a lot of weird edge cases I need to fix.\n" +
-                            "Thanks.\n";
-                        end_reached = true;
-                        break;
-                    default:
-                        message = "Oops! Broke something.";
-                        break;
-                }
+                string[] sct_message = {
+                    "\nBack again? You've already unlocked the secret stoned command!\n" +
+                    "Sorry if it's a bit of a disappointment. It was orginally a mistake, actually.\n" +
+                    "I made some goofs in my code, and didn't properly replace text after I modified it." +
+                    "After that, it became a nice testing command. Easy to tell what text was changed with it!\n",
+
+                    "Did you notice it now appears in the help menus? Probably. You're smart like that.\n" +
+                    "I'll be impressed if anyone actually finds this mesasge in the first place!\n" +
+                    "-CrunchyDuck <3\n",
+
+                    "\nHi again.\n" +
+                    "Come back to chat?\n" +
+                    "It does get lonely sometimes working on this stuff.\n",
+
+                    "\nI actually got my start in modding in RimWorld. The modding is strikingly similar to Stardew's!\n" +
+                    "I wasn't very good at it, being my first foray into programming. But it's been years since then.\n" +
+                    "When I came to Stardew and SMAPI was like \"Oh yeah, we use Harmony\" I was like :O\n" +
+                    "Then when I learned a little more about decompilation for this project, I felt like a true hacker.\n" +
+                    "I really want to try my hand at doing my own Harmony projects.\n",
+
+                    "\nActually, something I was thinking of doing is a YouTube series on the code of Stardew.\n" +
+                    "There's some interesting things in there.\n" +
+                    "I figured I might start with explaining the ins and outs of fishing first.\n",
+
+                    "\nThis project kind of helped me, personally. It's sort of the only reason I'm writing this easter egg.\n" +
+                    "I guess I like \'marking\' parts of my history. I do it with most of my projects.\n" +
+                    "I was having a bit of a crisis of *why* I do what I do. I made a video about it, kind of.\n" +
+                    "I don't really know how to talk about it with a stranger,\nbut my upbringing really pushed me towards wanting fame, or glory.\n" +
+                    "But I don't think that's what I want. I just want to marvel at the world, and help others do the same.\n",
+
+                    "\nI actually tried to volunteer at a local farm, recently!\n" +
+                    "I've always loved learning to do things on my own, from scratch.\n" +
+                    "Like, if I had all the fancy tools taken away from me, I could still do it.\n" +
+                    "They grow various vegetables, I love animals, and I figured it'd be some nice exercise.\n" +
+                    "I haven't heard back from them, though.\n",
+
+                    "\nI feel like I want to say a lot more here, but I can't really bring myself to do it.\n" +
+                    "But I really do appreciate you reading my dumb ramblings. Or, well, just being someone who used my mod.\n" +
+                    "I'll probably get back to work now. There's a lot of weird edge cases I need to fix.\n" +
+                    "Thanks.\n",
+                };
+                int secret_index = Config.secret_found - 1;
+
+                if (secret_index < sct_message.Length)
+                    message = sct_message[secret_index];
+                if (secret_index == sct_message.Length-1)
+                    end_reached = true;
 
                 Config.secret_found++;
                 if (end_reached)
@@ -446,13 +440,12 @@ namespace OwOMod {
                 "\nWell done! It is I, THE CrunchyDuck, coming at you live\n" +
                 "from the past with this prerecorded message!\n\n" +
                 "Thanks for using my dumb mod :) Here's a secert variable you can pass to the OwO command: stoned\n" +
-                "Used like: OwO stoned\n" +
-                "This doubles up much of the text to be lloonngg. Might cause some bugs, not well tested. Enjoy <3\n";
+                "Used like: owomods stoned\n" +
+                "This doubles up much of the text to be lloonngg. Makes some graphical bugs a bit worse. Enjoy <3\n";
             bool passed = false;
 
             foreach(string arg in args) {
-                arg.ToLower();
-				switch (arg) {
+				switch (arg.ToLower()) {
 					case "crunchy":
                     case "duck":
                     case "crunchyduck":
@@ -699,6 +692,7 @@ namespace OwOMod {
     /// Settings for the mod.
     /// </summary>
     public class ModConfig {
+        // hello there code snooper
         public bool hello_there_json_snooper { get; set; } = false;
         public bool replace_r_l { get; set; } = true;
         public bool replace_o_u { get; set; } = false;
@@ -723,7 +717,7 @@ namespace OwOMod {
             Mod = mod;
 		}
 
-        public static void Prefix(ref string s) {
+        public static void textBoxPrefix(ref string s) {
             s = Mod.MakeOwO(s);
         }
 
