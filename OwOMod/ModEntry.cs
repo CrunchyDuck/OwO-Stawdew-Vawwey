@@ -7,7 +7,7 @@ using StardewValley;
 using Harmony;
 
 namespace OwOMod {
-    /// <summary>Most of the mod code..</summary>
+    /// <summary>Most of the mod code.</summary>
     public class ModEntry : Mod {
         private ModConfig Config;
         private int seed = new Random().Next(1000);  // A random seed, used to offset the hashing function.
@@ -90,7 +90,6 @@ namespace OwOMod {
             Type[] lots_of_types = new Type[] { typeof(SpriteBatch), typeof(string), typeof(SpriteFont), typeof(int), typeof(int), typeof(int), typeof(string), typeof(int), typeof(string[]), typeof(Item), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(float), typeof(CraftingRecipe), typeof(System.Collections.Generic.IList<Item>) };
             original = AccessTools.Method(typeof(StardewValley.Menus.IClickableMenu), "drawHoverText", lots_of_types);
 			harmony.Patch(original, prefix: patch);
-
         }
 
 		private void GameLoop_UpdateTicked(object sender, StardewModdingAPI.Events.UpdateTickedEventArgs e) {
@@ -196,14 +195,13 @@ namespace OwOMod {
                         change_message += $"excited = {Config.excited}\n";
                         change_message += $"anxious = {Config.anxiety}\n";
                         change_message += $"cat = {Config.cat}\n";
-						change_message += $"faces = {Config.faces}\n";
+                        change_message += $"faces = {Config.faces}\n";
 
                         if (Config.secret_found != -1) {
                             Config.stoned = true;
                             change_message += $"stoned = {Config.stoned}\n";
                         }
                         break;
-
                     case "lisp":
 						Config.replace_r_l = !Config.replace_r_l;
                         change_message += $"lisp = {Config.replace_r_l}\n";
@@ -494,7 +492,7 @@ namespace OwOMod {
         /// </summary>
         /// <param name="text">The text to modify</param>
 		public string MakeOwO(string text) {
-            if (Config.randomly_enable && randomly_enabled == false)
+            if (Config.randomly_enable && randomly_enabled == false || text == null)
                 return text;
 
             Random random = GetConsistentRandom(text);
@@ -557,7 +555,7 @@ namespace OwOMod {
                                 int roll = random.Next(4);  // Initial vowel extend chance
                                 while (roll == 1) {
                                     new_text += next_char;
-                                    roll = random.Next(4);  // Higher chance for repeat stuttering
+                                    roll = random.Next(4);
                                 }
                                 continue;
                             }
